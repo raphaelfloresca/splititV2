@@ -9,6 +9,7 @@ package splititV2;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.text.DecimalFormat;
 
 public class Project {
   private static Scanner in = new Scanner(System.in);
@@ -92,6 +93,15 @@ public class Project {
       // This creates a list of vote lists
       Votes[] newListOfVoteLists = new Votes[newNumberTeamMembers];
 
+      // This initialises an int array where all scores = 0. This is to prevent a null pointer exception if the user
+      // quits before entering their scores.
+      int[] newVotesForAGivenMember = new int[newNumberTeamMembers - 1];
+
+      // This creates blank vote lists for each index of newListOfVoteLists
+      for (int newVoteListCounter = 0; newVoteListCounter < newListOfVoteLists.length; newVoteListCounter++) {
+        newListOfVoteLists[newVoteListCounter] = new Votes(newVotesForAGivenMember);
+      }
+
       // Appends all this information to the masterListOfProjects ArrayList
       masterListOfProjects.add(new Project(newProjectName, newNumberTeamMembers, newListOfTeamMembers, newListOfVoteLists));
 
@@ -127,7 +137,6 @@ public class Project {
 
   // This method allows the user to enter votes for a given project.
   public static void enterVotes() {
-    Scanner in = new Scanner(System.in);
 
     final int MAX_SCORE = 100;
 
@@ -135,7 +144,6 @@ public class Project {
     String voteAgain;
     String nameOfVoter;
     int voteCounter;
-    int votesListCounter;
     int voteChecker;
     boolean programmeRunning = true;
 
@@ -225,6 +233,69 @@ public class Project {
             System.out.print("\nUnknown command, please try again.");
             break;
         }
+      }
+    }
+  }
+
+  // This method shows the votes for a given project.
+  public static void showVotes() {
+    DecimalFormat df = new DecimalFormat("#0");
+
+    String existingProjectName;
+
+    System.out.print("\nEnter the project name: ");
+    existingProjectName = in.next();
+
+    if (!containsProjectName(masterListOfProjects, existingProjectName)) {
+      System.out.println("There is no project with that name.");
+    }
+
+    for (Project existingProject : masterListOfProjects) {
+      if (existingProjectName.equals(existingProject.getProjectName())) {
+        // This will only work with teams of three as the steps to calculate the vote share varies across team members.
+        int teamMember1VoteForTeamMember2 = existingProject.getListOfVoteLists()[0].getVoteAtIndex(0);
+        int teamMember1VoteForTeamMember3 = existingProject.getListOfVoteLists()[0].getVoteAtIndex(1);
+        int teamMember2VoteForTeamMember1 = existingProject.getListOfVoteLists()[1].getVoteAtIndex(0);
+        int teamMember2VoteForTeamMember3 = existingProject.getListOfVoteLists()[1].getVoteAtIndex(1);
+        int teamMember3VoteForTeamMember1 = existingProject.getListOfVoteLists()[2].getVoteAtIndex(0);
+        int teamMember3VoteForTeamMember2 = existingProject.getListOfVoteLists()[2].getVoteAtIndex(1);
+
+        // The ratios for calculating the vote share are as follows:
+        // Team member 2’s vote for the effort of Team member 3 compared with Team member 1.
+        double r231 = (double) teamMember2VoteForTeamMember3 / teamMember2VoteForTeamMember1;
+        // Team member 3’s vote for the effort of Team member 2 compared with Team member 1.
+        double r321 = (double) teamMember3VoteForTeamMember2 / teamMember3VoteForTeamMember1;
+        // Team member 1’s vote for the effort of Team member 3 compared with Team member 2.
+        double r132 = (double) teamMember1VoteForTeamMember3 / teamMember1VoteForTeamMember2;
+        // Team member 3’s vote for the effort of Team member 1 compared with Team member 2.
+        double r312 = (double) teamMember3VoteForTeamMember1 / teamMember3VoteForTeamMember2;
+        // Team member 1’s vote for the effort of Team member 2 compared with Team member 3.
+        double r123 = (double) teamMember1VoteForTeamMember2 / teamMember1VoteForTeamMember3;
+        // Team member 2’s vote for the effort of Team member 1 compared with Team member 3.
+        double r213 = (double) teamMember2VoteForTeamMember1 / teamMember2VoteForTeamMember3;
+
+        // This calculates the share for each team member
+        double shareForTeamMember1 = ((1 / (1 + r231 + r321)) * 100);
+        double shareForTeamMember2 = ((1 / (1 + r132 + r312)) * 100);
+        double shareForTeamMember3 = ((1 / (1 + r123 + r213)) * 100);
+
+        System.out.println("\nThere are " + existingProject.getNumberTeamMembers() + " members.");
+        System.out.println("\nThe point allocation based on votes is: \n");
+
+        for (int teamMemberCounter = 0; teamMemberCounter < existingProject.getNumberTeamMembers(); teamMemberCounter++) {
+          System.out.print("\t" + existingProject.getListOfTeamMembers()[teamMemberCounter] + ": ");
+
+          if (teamMemberCounter == 0) {
+            System.out.println(df.format(shareForTeamMember1));
+          } else if (teamMemberCounter == 1) {
+            System.out.println(df.format(shareForTeamMember2));
+          } else if (teamMemberCounter == 2) {
+            System.out.println(df.format(shareForTeamMember3));
+          }
+        }
+
+        PressEnterToExit.pressEnterToExit();
+
       }
     }
   }

@@ -36,8 +36,8 @@ public class Main {
           Project.enterVotes();
           break;
         case "s":
-          System.out.println("\tOption not yet included, please try again.");
-          break; // blank for now
+          Project.showVotes();
+          break;
         default:
           System.out.println("\tUnknown option, please try again.");
           break;

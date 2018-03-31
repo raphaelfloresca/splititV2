@@ -20,4 +20,6 @@ public class Votes {
   public int getVoteAtIndex(int index) {
     return listOfVotes[index];
   }
+
+  public void setVoteAtIndex(int index, int newValue) { this.listOfVotes[index] = newValue; }
 }
