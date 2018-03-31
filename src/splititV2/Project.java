@@ -6,6 +6,7 @@ package splititV2;
 * the Vote class used to contain more information types) thus we will work on improving this in the next deliverable
 */
 
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class Project {
   private Votes[] listOfVoteLists;
 
   // This stores the master list of projects
-  private static ArrayList<Project> masterListOfProjects = new ArrayList<>(10);
+  protected static ArrayList<Project> masterListOfProjects = new ArrayList<>(10);
 
   // Constructor for the Project class
   public Project(String aProjectName, int aNumberOfTeamMembers, String[] aListOfTeamMembers, Votes[] aListOfVoteLists) {
@@ -57,7 +58,7 @@ public class Project {
     String newProjectName;
     String createAnotherProject;
     String[] newListOfTeamMembers;
-    int newNumberTeamMembers;
+    int newNumberTeamMembers = 0;
     boolean programmeRunning = true;
     boolean optionChecker = false;
 
@@ -67,11 +68,18 @@ public class Project {
 
       System.out.print("\nEnter the number of team members: ");
 
-      // Following two lines included to ensure that only integer inputs are accepted
-      // Method adapted from user polygenelubricants at:
-      // https://stackoverflow.com/questions/2912817/how-to-use-scanner-to-accept-only-valid-int-as-input
-      while (!in.hasNextInt()) in.next();
-      newNumberTeamMembers = in.nextInt();
+      // Following included to ensure that only integer inputs are accepted
+
+      boolean validInput = false;
+      while (!validInput) {
+        try {
+          newNumberTeamMembers = in.nextInt();
+          validInput = true;
+        } catch (Exception e) {
+          in.next();
+          System.out.print("\tPlease enter a valid integer: ");
+        }
+      }
 
        newListOfTeamMembers = new String[newNumberTeamMembers];
 
@@ -144,9 +152,8 @@ public class Project {
       // This for loop will run through every project that has been created and check if the entered project name exists
       for (Project existingProject : masterListOfProjects) {
         if (existingProjectName.equals(existingProject.getProjectName())) {
-          votesListCounter = 0;
           String[] nameOfCurrentMember = existingProject.getListOfTeamMembers();
-          int[] votesForGivenTeamMember = new int[((existingProject.getNumberTeamMembers()) - 1)];
+
           Votes[] completedListOfVoteLists = new Votes[existingProject.getNumberTeamMembers()];
 
           System.out.println("\nThere are " + existingProject.getNumberTeamMembers() + " members.");
@@ -154,13 +161,14 @@ public class Project {
           // This for loop enables us to enter the scores that one member gave the other members
           for (int nameCounter = 0; nameCounter < existingProject.getNumberTeamMembers(); nameCounter++) {
             nameOfVoter = nameOfCurrentMember[nameCounter];
-            voteCounter = 0;
             boolean maxVoteChecker = false;
             System.out.println("\n\nEnter " + nameOfVoter + "'s votes, points must add up to 100:\n\n");
 
             // This while loop with a boolean maxVoteChecker forces the user to enter votes that total 100
             while (!maxVoteChecker) {
               voteChecker = 0;
+              voteCounter = 0;
+              int[] votesForGivenTeamMember = new int[((existingProject.getNumberTeamMembers()) - 1)];
 
               // This for loop allows the user to input the votes for all the members.
               // The votes for a single team member is stored in an int array - votesForAGivenTeamMember
@@ -172,20 +180,27 @@ public class Project {
                 if (!nameOfVoter.equals(nameOfCurrentMember[teamMemberCounter])) {
                   System.out.print("\tEnter " + nameOfVoter + "'s points for ");
                   System.out.print(nameOfCurrentMember[teamMemberCounter] + ": ");
-                  while (!in.hasNextInt()) in.next(); // same as above
-                  votesForGivenTeamMember[voteCounter] = in.nextInt();
+                  boolean validInput = false;
+                  while (!validInput) {
+                    try {
+                      votesForGivenTeamMember[voteCounter] = in.nextInt();
+                      validInput = true;
+                    } catch (Exception e) {
+                      in.next();
+                      System.out.print("\tPlease enter a valid integer: ");
+                    }
+                  }
                   voteChecker += votesForGivenTeamMember[voteCounter];
                   voteCounter++;
                 }
               }
               if (voteChecker == MAX_SCORE) {
                 maxVoteChecker = true;
-                completedListOfVoteLists[votesListCounter] = new Votes(votesForGivenTeamMember);
-                votesListCounter++;
               }
               else {
                 System.out.println("\nVotes do not add up to 100. Please enter again.\n");
               }
+              completedListOfVoteLists[nameCounter] = new Votes(votesForGivenTeamMember);
             }
           }
           // Writes the completed list of vote lists to the existing project

@@ -8,6 +8,8 @@ public class Main {
     String option;
     boolean programmeRunning = true;
 
+    ReadFromFile.read();
+
     while (programmeRunning) {
       System.out.println("\nWelcome to Split-it\n\n"
           + "\tAbout (A)\n"

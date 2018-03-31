@@ -15,12 +15,12 @@ public class SaveToFile {
     PrintWriter outputStream = null;
     try {
       outputStream
-          = new PrintWriter(new FileOutputStream("Project Information.txt"));
+          = new PrintWriter(new FileOutputStream("projectinformation.txt"));
     } catch (FileNotFoundException e) {
-      System.out.println("Error opening the file Project Information.txt.");
+      System.out.println("Error opening the file projectinformation.txt.");
       System.exit(0);
     }
-    System.out.println("\nWriting project information to file Project Information.txt.");
+    System.out.println("\nWriting project information to file projectinformation.txt.");
 
     // To check if there are any projects at all.
 
@@ -47,30 +47,26 @@ public class SaveToFile {
         for (int nameCounter = 0; nameCounter < numberTeamMembers; nameCounter++) {
           String nameOfVoter = listOfTeamMembers[nameCounter];
           int voteCounter = 0;
-          int voteListCounter = 0;
           outputStream.print(", " + nameOfVoter);
           outputStream.flush();
 
           // This for loop appends each other team member's name and their associated score, enabling the above for loop to work
-          // HELP!!!
           for (int teamMemberCounter = 0; teamMemberCounter < numberTeamMembers; teamMemberCounter++) {
             if (!nameOfVoter.equals(listOfTeamMembers[teamMemberCounter])) {
               outputStream.print(", " + listOfTeamMembers[teamMemberCounter]);
-              outputStream.print(", " + listOfVoteLists[voteListCounter].getVoteAtIndex(voteCounter));
+              outputStream.print(", " + listOfVoteLists[nameCounter].getVoteAtIndex(voteCounter));
               outputStream.flush();
               voteCounter++;
-              voteListCounter++;
             }
           }
         }
+        outputStream.println();
+        outputStream.flush();
       }
-      outputStream.println();
-      outputStream.flush();
     }
 
     else {
-      outputStream.println("There are no projects.");
-      outputStream.flush();
+      System.out.println("\nThere are no projects.");
     }
 
     outputStream.close();
