@@ -71,6 +71,6 @@ public class SaveToFile {
 
     outputStream.close();
 
-    System.out.println("Thank you for using splititV2. Hope you have a great day!\n");
+    System.out.println("Thank you for using splititV2. Have a great day!\n");
   }
 }

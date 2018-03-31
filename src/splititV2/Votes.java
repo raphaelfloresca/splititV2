@@ -1,7 +1,5 @@
 package splititV2;
 
-import java.util.Arrays;
-
 public class Votes {
   private int[] listOfVotes;
 

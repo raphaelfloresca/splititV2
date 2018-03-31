@@ -60,10 +60,42 @@ public class Project {
     String createAnotherProject;
     String[] newListOfTeamMembers;
     int newNumberTeamMembers = 0;
+    int numberOfProgrammeUsages = 0;
     boolean programmeRunning = true;
 
     while (programmeRunning) {
       boolean optionChecker = false;
+
+      // Displays if there are no stored projects.
+      if (masterListOfProjects.size() == 0) {
+        System.out.println("\nThere are no stored projects.");
+      }
+
+      // This produces a list of stored projects
+      System.out.println("\nList of stored projects:\n");
+      for (Project existingProject : masterListOfProjects) {
+        System.out.println("\t" + existingProject.getProjectName());
+      }
+
+      // Prompts the user to create a new project upon opening the submenu. numberOfProgrammeUsages increments when
+      // the user chooses to input a new project immediately after the initial project (and subsequent projects after).
+      // However, when the user exits the submenu, this is re-initialised to 0 so that upon accessing the submenu
+      // on a later occasion, the user is again prompted to create a project or exit upon first opening the submenu.
+      if (numberOfProgrammeUsages == 0) {
+        System.out.print("\nWould you like to create a new project? (y/n) ");
+        String enterVotes = in.next().toLowerCase();
+
+        switch (enterVotes) {
+          case "y":
+            break;
+          case "n":
+            PressEnterToExit.pressEnterToExit();
+            return;
+          default:
+            System.out.print("\nUnknown command, please try again.");
+            break;
+        }
+      }
 
       System.out.print("\nEnter the project name: ");
       newProjectName = in.next();
@@ -71,8 +103,8 @@ public class Project {
       System.out.print("\nEnter the number of team members: ");
 
       // Following included to ensure that only integer inputs are accepted
-
       boolean validInput = false;
+
       while (!validInput) {
         try {
           newNumberTeamMembers = in.nextInt();
@@ -113,10 +145,12 @@ public class Project {
 
         switch (createAnotherProject) {
           case "y":
+            numberOfProgrammeUsages++;
             programmeRunning = true;
             optionChecker = true;
             break;
           case "n":
+            numberOfProgrammeUsages = 0;
             PressEnterToExit.pressEnterToExit();
             optionChecker = true;
             programmeRunning = false;
@@ -138,7 +172,6 @@ public class Project {
 
   // This method allows the user to enter votes for a given project.
   public static void enterVotes() {
-
     final int MAX_SCORE = 100;
 
     String existingProjectName;
@@ -149,10 +182,10 @@ public class Project {
     int numberOfProgrammeUsages = 0;
     boolean programmeRunning = true;
 
-
     while (programmeRunning) {
       boolean optionChecker = false;
       boolean nameFound = false;
+
       // This prompts the user to go back to the main menu if no projects have already been created.
       if (masterListOfProjects.size() == 0) {
         System.out.println("\nThere are no stored projects. Please create a project. ");
@@ -163,12 +196,14 @@ public class Project {
       // This produces a list of stored projects
       System.out.println("\nList of stored projects:\n");
       for (Project existingProject : masterListOfProjects) {
-        System.out.println(existingProject.getProjectName());
+        System.out.println("\t" + existingProject.getProjectName());
       }
 
+      // Same rationale as in createProject()
       if (numberOfProgrammeUsages == 0) {
         System.out.print("\nWould you like to enter the votes for a project? (y/n) ");
         String enterVotes = in.next().toLowerCase();
+
         switch (enterVotes) {
           case "y":
             break;
@@ -208,6 +243,7 @@ public class Project {
           for (int nameCounter = 0; nameCounter < existingProject.getNumberTeamMembers(); nameCounter++) {
             nameOfVoter = nameOfCurrentMember[nameCounter];
             boolean maxVoteChecker = false;
+
             System.out.println("\nEnter " + nameOfVoter + "'s votes, points must add up to 100:\n");
 
             // This while loop with a boolean maxVoteChecker forces the user to enter votes that total 100
@@ -221,12 +257,12 @@ public class Project {
               // which is as long as the remaining number of team members excluding the scoring team member themselves.
               // Each team member stores their scores in their own int array. All these int arrays are then put into
               // a Votes array (which takes int arrays as parameters) storing the completed set of votes for the project.
-
               for (int teamMemberCounter = 0; teamMemberCounter < existingProject.getNumberTeamMembers(); teamMemberCounter++) {
                 if (!nameOfVoter.equals(nameOfCurrentMember[teamMemberCounter])) {
                   System.out.print("\tEnter " + nameOfVoter + "'s points for ");
                   System.out.print(nameOfCurrentMember[teamMemberCounter] + ": ");
                   boolean validInput = false;
+
                   while (!validInput) {
                     try {
                       votesForGivenTeamMember[voteCounter] = in.nextInt();
@@ -256,6 +292,7 @@ public class Project {
       while (!optionChecker) { // same as above
         System.out.print("\nWould you like to enter votes for another project? (y/n) ");
         voteAgain = in.next().toLowerCase();
+
         switch (voteAgain) {
           case "y":
             numberOfProgrammeUsages++;
@@ -282,25 +319,30 @@ public class Project {
 
     boolean nameFound = false;
     boolean programmeRunning = true;
-    boolean optionChecker;
     int numberOfProgrammeUsages = 0;
     String existingProjectName;
 
     while (programmeRunning) {
+      boolean optionChecker = false;
+
+      // Same rationale as enterVotes()
       if (masterListOfProjects.size() == 0) {
         System.out.println("\nThere are no stored projects. Please create a project. ");
         PressEnterToExit.pressEnterToExit();
         return;
       }
 
+      // Same rationale as enterVotes()
       System.out.println("\nList of stored projects:\n");
       for (Project existingProject : masterListOfProjects) {
         System.out.println("\t" + existingProject.getProjectName());
       }
 
+      // Same rationale as createProject()
       if (numberOfProgrammeUsages == 0) {
         System.out.print("\nWould you like to show the votes for a project? (y/n) ");
         String showVotes = in.next().toLowerCase();
+
         switch (showVotes) {
           case "y":
             break;
@@ -325,6 +367,7 @@ public class Project {
         }
       }
 
+      // Goes through the calculation process for each project in the master project list.
       for (Project existingProject : masterListOfProjects) {
         if (existingProjectName.equals(existingProject.getProjectName())) {
           // This will only work with teams of three as the steps to calculate the vote share varies across team members.
@@ -371,11 +414,10 @@ public class Project {
         }
       }
 
-      optionChecker = false;
-
       while (!optionChecker) { // same as above
         System.out.print("\nWould you like to show the scores for another project? (y/n) ");
         String deleteAgain = in.next().toLowerCase();
+
         switch (deleteAgain) {
           case "y":
             numberOfProgrammeUsages++;
@@ -396,30 +438,33 @@ public class Project {
     }
   }
 
-  // This allows the user to delete a project
+  // This allows the user to delete a project. Adapted from ArrayLists lecture notes.
   public static void deleteProject() {
     boolean programmeRunning = true;
-
     boolean nameFound = false;
     int numberOfProgrammeUsages = 0;
 
     while (programmeRunning) {
       boolean optionChecker = false;
+
+      // Same rationale as enterVotes()
       if (masterListOfProjects.size() == 0) {
         System.out.println("\nThere are no stored projects. Please create a project. ");
         PressEnterToExit.pressEnterToExit();
         return;
       }
 
+      // Same rationale as enterVotes()
       System.out.println("\nList of stored projects:\n");
       for (Project existingProject : masterListOfProjects) {
         System.out.println("\t" + existingProject.getProjectName());
       }
 
-
+      // Same rationale as createProject()
       if (numberOfProgrammeUsages == 0) {
         System.out.print("\nWould you like to delete a project? (y/n) ");
         String deleteProject = in.next().toLowerCase();
+
         switch (deleteProject) {
           case "y":
             break;
