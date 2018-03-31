@@ -16,7 +16,7 @@ public class About {
         + "\trent payments, restaurant bills and shared tasks. If you are\n"
         + "\tinterested, more information about Spliddit can be found in\n"
         + "\ta recent article published in XRDS which is a Computer Science\n"
-        + "\tmagazine for students.\n\n");
+        + "\tmagazine for students.\n");
     PressEnterToExit.pressEnterToExit();
   }
 }

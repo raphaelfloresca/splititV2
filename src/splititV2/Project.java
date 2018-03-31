@@ -282,11 +282,11 @@ public class Project {
 
     boolean nameFound = false;
     boolean programmeRunning = true;
+    boolean optionChecker;
     int numberOfProgrammeUsages = 0;
     String existingProjectName;
 
     while (programmeRunning) {
-      boolean optionChecker = false;
       if (masterListOfProjects.size() == 0) {
         System.out.println("\nThere are no stored projects. Please create a project. ");
         PressEnterToExit.pressEnterToExit();
@@ -295,7 +295,7 @@ public class Project {
 
       System.out.println("\nList of stored projects:\n");
       for (Project existingProject : masterListOfProjects) {
-        System.out.println(existingProject.getProjectName());
+        System.out.println("\t" + existingProject.getProjectName());
       }
 
       if (numberOfProgrammeUsages == 0) {
@@ -413,7 +413,7 @@ public class Project {
 
       System.out.println("\nList of stored projects:\n");
       for (Project existingProject : masterListOfProjects) {
-        System.out.println(existingProject.getProjectName());
+        System.out.println("\t" + existingProject.getProjectName());
       }
 
 
