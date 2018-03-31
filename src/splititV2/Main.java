@@ -16,6 +16,7 @@ public class Main {
           + "\tCreate Project (C)\n"
           + "\tEnter Votes (V)\n"
           + "\tShow Project (S)\n"
+          + "\tDelete Project (D)\n"
           + "\tQuit (Q)\n");
       System.out.print("\tPlease choose an option: ");
       option = in.next().toLowerCase();
@@ -37,6 +38,9 @@ public class Main {
           break;
         case "s":
           Project.showVotes();
+          break;
+        case "d":
+          Project.deleteProject();
           break;
         default:
           System.out.println("\tUnknown option, please try again.");
