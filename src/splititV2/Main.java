@@ -24,23 +24,23 @@ public class Main {
       // Handles the main menu choices.
       switch(option) {
         case "a":
-          About.about();
+          Submenus.about();
           break;
         case "c":
-          Project.createProject();
+          Submenus.createProject();
           break;
         case "q":
           SaveToFile.export();
           programmeRunning = false;
           break;
         case "v":
-          Project.enterVotes();
+          Submenus.enterVotes();
           break;
         case "s":
-          Project.showVotes();
+          Submenus.showVotes();
           break;
         case "d":
-          Project.deleteProject();
+          Submenus.deleteProject();
           break;
         default:
           System.out.println("\tUnknown option, please try again.");

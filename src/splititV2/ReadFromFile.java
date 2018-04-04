@@ -9,9 +9,9 @@ import static splititV2.Project.masterListOfProjects;
 
 public class ReadFromFile{
   public static void read () {
-    String projectName;
+    String projectName = null;
     String [] listOfTeamMembers;
-    int numberTeamMembers, projectCounter = 0;
+    int numberTeamMembers = 0;
     long lineCount = 0;
     final String delims = "[ ,]+"; // used later to parse data
 
@@ -29,15 +29,29 @@ public class ReadFromFile{
       while (inputStream.hasNextLine()) {
         String data = inputStream.nextLine(); // reads each line of saved info
         String [] parsedData = data.split(delims); // this parses the data into tokens for us to use
-        projectName = parsedData[0];
-        numberTeamMembers = Integer.parseInt(parsedData[1]);
+        try {
+          projectName = parsedData[0];
+        } catch (Exception e) {
+          System.out.println("File read error.");
+          System.exit(0);
+        }
+        try {
+          numberTeamMembers = Integer.parseInt(parsedData[1]);
+        } catch (Exception e) {
+          System.out.println("File read error.");
+          System.exit(0);
+        }
         listOfTeamMembers = new String[numberTeamMembers];
         Votes[] listOfVotes = new Votes[numberTeamMembers];
         int [] votesForOneMember = new int[numberTeamMembers - 1];
         System.out.println(projectName + ": "+ numberTeamMembers + " members.");
-        System.out.println(Arrays.toString(parsedData));
         for (int nameCounter = 0; nameCounter < numberTeamMembers; nameCounter++) {
-          listOfTeamMembers[nameCounter] = parsedData[nameCounter + 2];
+          try {
+            listOfTeamMembers[nameCounter] = parsedData[nameCounter + 2];
+          } catch (Exception e) {
+            System.out.println("File read error.");
+            System.exit(0);
+          }
           int dataBlock = 1 + numberTeamMembers; // this lets us skip the indexes of the data at the start
           int votesBlock = (numberTeamMembers*2 - 1); // this informs us how many indexes to skip for each set of votes
           for (int teamMemberCounter = 0; teamMemberCounter < numberTeamMembers; teamMemberCounter++) {
@@ -46,7 +60,12 @@ public class ReadFromFile{
               // this informs us which index to take the vote data from
               // adding 3 skips the first set of names while for each team member we skip to the next integer value
               int voteIndex = skipBlock + 3 + voteBlockCounter*2;
-              votesForOneMember[voteBlockCounter] = Integer.parseInt(parsedData[voteIndex]);
+              try {
+                votesForOneMember[voteBlockCounter] = Integer.parseInt(parsedData[voteIndex]);
+              } catch (Exception e) {
+                System.out.println("File read error.");
+                System.exit(0);
+              }
             }
             listOfVotes[teamMemberCounter] = new Votes(votesForOneMember);
           }
