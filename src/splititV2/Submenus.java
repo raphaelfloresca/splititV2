@@ -5,17 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import static splititV2.Project.containsProjectName;
 import static splititV2.Project.masterListOfProjects;
 
 public class Submenus {
   private static Scanner in = new Scanner(System.in);
-
-  // Following method searches through the list of projects to see whether it contains a project of a certain name
-  // Method adapted from user Josh M at:
-  // https://stackoverflow.com/questions/18852059/java-list-containsobject-with-field-value-equal-to-x
-  public static boolean containsProjectName(final ArrayList<Project> list, final String aProjectName) {
-    return list.stream().anyMatch(o -> o.getProjectName().equals(aProjectName));
-  }
 
   // Returns the "About" blurb when prompted from main menu
   public static void about() {
@@ -36,7 +30,7 @@ public class Submenus {
 
   // This method creates a blank project from which the user will enter the votes for their team.
   public static void createProject() {
-    String newProjectName;
+    String newProjectName = null;
     String[] newListOfTeamMembers;
     int newNumberTeamMembers = 0;
     int numberOfProgrammeUsages = 0;
@@ -71,8 +65,19 @@ public class Submenus {
         }
       }
 
-      System.out.print("\nEnter the project name: ");
-      newProjectName = in.next();
+      boolean nameDuplicate = true;
+      while (nameDuplicate){
+        System.out.print("\nEnter the project name: ");
+        newProjectName = in.next();
+        if (containsProjectName(masterListOfProjects, newProjectName)) {
+          System.out.print("\nThat project already exists!");
+          continue;
+        }
+        else {
+          nameDuplicate = false;
+          break;
+        }
+      }
 
       System.out.print("\nEnter the number of team members: ");
 

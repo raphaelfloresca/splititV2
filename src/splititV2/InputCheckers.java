@@ -43,11 +43,16 @@ public class InputCheckers {
     while (!validInput) {
       try {
         output = in.nextInt();
-        validInput = true;
       } catch (Exception e) {
         in.next();
         System.out.print("\tPlease enter a valid integer: ");
+        continue;
       }
+      if (output<0) {
+        System.out.print("\tPlease enter a positive number: ");
+        continue;
+      }
+      break;
     }
     return output;
   }

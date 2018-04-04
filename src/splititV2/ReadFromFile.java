@@ -32,13 +32,13 @@ public class ReadFromFile{
         try {
           projectName = parsedData[0];
         } catch (Exception e) {
-          System.out.println("File read error.");
+          System.out.println("File read error. Manually changing the content in projectinformation.txt might have caused this. Revert any changes or delete the file.");
           System.exit(0);
         }
         try {
           numberTeamMembers = Integer.parseInt(parsedData[1]);
         } catch (Exception e) {
-          System.out.println("File read error.");
+          System.out.println("File read error. Manually changing the content in projectinformation.txt might have caused this. Revert any changes or delete the file.");
           System.exit(0);
         }
         listOfTeamMembers = new String[numberTeamMembers];
@@ -49,7 +49,7 @@ public class ReadFromFile{
           try {
             listOfTeamMembers[nameCounter] = parsedData[nameCounter + 2];
           } catch (Exception e) {
-            System.out.println("File read error.");
+            System.out.println("File read error. Manually changing the content in projectinformation.txt might have caused this. Revert any changes or delete the file.");
             System.exit(0);
           }
           int dataBlock = 1 + numberTeamMembers; // this lets us skip the indexes of the data at the start
@@ -63,7 +63,7 @@ public class ReadFromFile{
               try {
                 votesForOneMember[voteBlockCounter] = Integer.parseInt(parsedData[voteIndex]);
               } catch (Exception e) {
-                System.out.println("File read error.");
+                System.out.println("File read error. Manually changing the content in projectinformation.txt might have caused this. Revert any changes or delete the file.");
                 System.exit(0);
               }
             }
