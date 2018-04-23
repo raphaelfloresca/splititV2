@@ -92,24 +92,24 @@ public class Submenus {
 
         while (!nameIsDuplicate) {
           System.out.print("\n\tEnter the first name of team member " + (numberOfTeamCounter + 1) + ": ");
-          newListOfTeamMembers[numberOfTeamCounter] = InputCheckers.validName();
+           String nameChecker = InputCheckers.validName();
 
           if (numberOfTeamCounter > 0) {
             for (String name : newListOfTeamMembers) {
-              if (newListOfTeamMembers[numberOfTeamCounter].equalsIgnoreCase(name)) {
-                System.out.println("This name is a duplicate. Please enter another name.");
+              if (nameChecker.equalsIgnoreCase(name)) {
+                System.out.println("\nThis name is a duplicate. Please enter another name.");
                 nameIsDuplicate = false;
                 break;
-              } else if (numberOfTeamCounter == 2 && name.equalsIgnoreCase(newListOfTeamMembers[0])) {
+              }
+              else {
                 nameIsDuplicate = true;
-              } else {
-                nameIsDuplicate = true;
-                break;
               }
             }
-          } else if (numberOfTeamCounter == 0) {
+          }
+          else if (numberOfTeamCounter == 0) {
             nameIsDuplicate = true;
           }
+          newListOfTeamMembers[numberOfTeamCounter] = nameChecker;
         }
       }
 
