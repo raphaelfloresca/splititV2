@@ -100,6 +100,8 @@ public class Submenus {
                 System.out.println("This name is a duplicate. Please enter another name.");
                 nameIsDuplicate = false;
                 break;
+              } else if (numberOfTeamCounter == 2 && name.equalsIgnoreCase(newListOfTeamMembers[0])) {
+                nameIsDuplicate = true;
               } else {
                 nameIsDuplicate = true;
                 break;
