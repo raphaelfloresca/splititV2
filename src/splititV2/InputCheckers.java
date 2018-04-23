@@ -70,7 +70,7 @@ public class InputCheckers {
         break;
       }
       else {
-        System.out.print("Name must contain alphanumeric characters: ");
+        System.out.print("\tName must contain alphanumeric characters: ");
         continue;
       }
     }
@@ -87,7 +87,7 @@ public class InputCheckers {
         break;
       }
       else {
-        System.out.print("Name must consist of alphabets. This is not a gamertag: ");
+        System.out.print("\tName must consist of alphabets. This is not a gamertag: ");
         continue;
       }
     }
