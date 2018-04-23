@@ -27,23 +27,28 @@ public class ReadFromFile{
     }
 
     if (inputStream != null) {
+      int projectCounter = 0;
       while (inputStream.hasNextLine()) {
         String data = inputStream.nextLine(); // reads each line of saved info
         String [] parsedData = data.split(delims); // this parses the data into tokens for us to use
         try {
           projectName = parsedData[0];
         } catch (Exception e) {
-          System.out.println(errorMessage);
+          System.out.println(errorMessage + "\nError: Name of Project number " + (projectCounter+1) + " missing.");
           System.exit(0);
         }
         if (!projectName.matches(".*[a-zA-Z0-9]+.*")) { // same idea as in InputCheckers
-          System.out.println(errorMessage);
+          System.out.println(errorMessage + "\nError: Name of Project number " + (projectCounter+1) + " corrupted.");
           System.exit(0);
         }
         try {
           numberTeamMembers = Integer.parseInt(parsedData[1]);
         } catch (Exception e) {
-          System.out.println(errorMessage);
+          System.out.println(errorMessage + "\nError: Number of Team Members for Project number " + (projectCounter+1) + " missing or corrupted.");
+          System.exit(0);
+        }
+        if (parsedData.length > ((numberTeamMembers*numberTeamMembers)*2) + 2) {
+          System.out.println(errorMessage + "\nError: Data stored in single line; unable to read.");
           System.exit(0);
         }
         listOfTeamMembers = new String[numberTeamMembers];
@@ -54,11 +59,11 @@ public class ReadFromFile{
           try {
             listOfTeamMembers[nameCounter] = parsedData[nameCounter + 2];
           } catch (Exception e) {
-            System.out.println(errorMessage);
+            System.out.println(errorMessage + "\nError: Name of Member number " + (nameCounter+1) + " for Project number " + (projectCounter+1) + " missing.");
             System.exit(0);
           }
           if(!listOfTeamMembers[nameCounter].matches("[a-zA-Z]+")){ // same idea as in InputCheckers
-            System.out.println(errorMessage);
+            System.out.println(errorMessage + "\nError: Name of Member number " + (nameCounter+1) + " for Project number " + (projectCounter+1) + " corrupted.");
             System.exit(0);
           }
           int dataBlock = 1 + numberTeamMembers; // this lets us skip the indexes of the data at the start
@@ -72,7 +77,7 @@ public class ReadFromFile{
               try {
                 votesForOneMember[voteBlockCounter] = Integer.parseInt(parsedData[voteIndex]);
               } catch (Exception e) {
-                System.out.println(errorMessage);
+                System.out.println(errorMessage+ "\nError: Votes for Project number " + (projectCounter+1) + " missing or corrupted.");
                 System.exit(0);
               }
             }
@@ -80,6 +85,7 @@ public class ReadFromFile{
           }
         }
           masterListOfProjects.add(new Project(projectName, numberTeamMembers, listOfTeamMembers, listOfVotes));
+        projectCounter++;
       }
       inputStream.close();
     }
