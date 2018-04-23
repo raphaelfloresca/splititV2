@@ -68,7 +68,7 @@ public class Submenus {
       boolean nameDuplicate = true;
       while (nameDuplicate){
         System.out.print("\nEnter the project name: ");
-        newProjectName = in.next();
+        newProjectName = InputCheckers.validString();
         if (containsProjectName(masterListOfProjects, newProjectName)) {
           System.out.print("\nThat project already exists!");
           continue;
@@ -81,14 +81,14 @@ public class Submenus {
 
       System.out.print("\nEnter the number of team members: ");
 
-      newNumberTeamMembers = InputCheckers.validInput();
+      newNumberTeamMembers = InputCheckers.validInt();
 
       newListOfTeamMembers = new String[newNumberTeamMembers];
 
       // Receives as many team member names as there are team members
       for (int numberOfTeamCounter = 0; numberOfTeamCounter < newNumberTeamMembers; numberOfTeamCounter++) {
         System.out.print("\n\tEnter the first name of team member " + (numberOfTeamCounter + 1) + ": ");
-        newListOfTeamMembers[numberOfTeamCounter] = in.next();
+        newListOfTeamMembers[numberOfTeamCounter] = InputCheckers.validName();
       }
 
       // This creates a list of vote lists
@@ -211,7 +211,7 @@ public class Submenus {
                 if (!nameOfVoter.equals(nameOfCurrentMember[teamMemberCounter])) {
                   System.out.print("\tEnter " + nameOfVoter + "'s points for ");
                   System.out.print(nameOfCurrentMember[teamMemberCounter] + ": ");
-                  votesForGivenTeamMember[voteCounter] = InputCheckers.validInput();
+                  votesForGivenTeamMember[voteCounter] = InputCheckers.validInt();
                   voteChecker += votesForGivenTeamMember[voteCounter];
                   voteCounter++;
                 }

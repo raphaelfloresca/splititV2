@@ -1,3 +1,4 @@
+// code adapted from http://pages.cs.wisc.edu/~hasti/cs368/JavaTutorial/NOTES/JavaIO_Scanner.html
 package splititV2;
 
 import java.io.*;
@@ -9,7 +10,7 @@ import static splititV2.Project.masterListOfProjects;
 
 public class ReadFromFile{
   public static void read () {
-    String projectName = null;
+    String projectName = null, errorMessage = "File read error. Manually changing the content in projectinformation.txt might have caused this. Revert any changes or delete the file.";
     String [] listOfTeamMembers;
     int numberTeamMembers = 0;
     long lineCount = 0;
@@ -20,7 +21,7 @@ public class ReadFromFile{
     try {
       inputStream = new Scanner(new FileInputStream("projectinformation.txt"));
       lineCount = Files.lines(Paths.get("projectinformation.txt")).count(); // code adapted from user superbob at https://stackoverflow.com/questions/26448352/counting-the-number-of-lines-in-a-text-file-java
-      System.out.println((int) lineCount + " previous projects detected.");
+      System.out.println((int) lineCount + " previous projects detected."); // tells us how many projects there are and if there are previous projects at all
     } catch (IOException e) {
         System.out.println("No previous projects created.");
     }
@@ -32,13 +33,17 @@ public class ReadFromFile{
         try {
           projectName = parsedData[0];
         } catch (Exception e) {
-          System.out.println("File read error. Manually changing the content in projectinformation.txt might have caused this. Revert any changes or delete the file.");
+          System.out.println(errorMessage);
+          System.exit(0);
+        }
+        if (!projectName.matches(".*[a-zA-Z0-9]+.*")) { // same idea as in InputCheckers
+          System.out.println(errorMessage);
           System.exit(0);
         }
         try {
           numberTeamMembers = Integer.parseInt(parsedData[1]);
         } catch (Exception e) {
-          System.out.println("File read error. Manually changing the content in projectinformation.txt might have caused this. Revert any changes or delete the file.");
+          System.out.println(errorMessage);
           System.exit(0);
         }
         listOfTeamMembers = new String[numberTeamMembers];
@@ -49,7 +54,11 @@ public class ReadFromFile{
           try {
             listOfTeamMembers[nameCounter] = parsedData[nameCounter + 2];
           } catch (Exception e) {
-            System.out.println("File read error. Manually changing the content in projectinformation.txt might have caused this. Revert any changes or delete the file.");
+            System.out.println(errorMessage);
+            System.exit(0);
+          }
+          if(!listOfTeamMembers[nameCounter].matches("[a-zA-Z]+")){ // same idea as in InputCheckers
+            System.out.println(errorMessage);
             System.exit(0);
           }
           int dataBlock = 1 + numberTeamMembers; // this lets us skip the indexes of the data at the start
@@ -63,7 +72,7 @@ public class ReadFromFile{
               try {
                 votesForOneMember[voteBlockCounter] = Integer.parseInt(parsedData[voteIndex]);
               } catch (Exception e) {
-                System.out.println("File read error. Manually changing the content in projectinformation.txt might have caused this. Revert any changes or delete the file.");
+                System.out.println(errorMessage);
                 System.exit(0);
               }
             }
