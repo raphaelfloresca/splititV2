@@ -87,8 +87,28 @@ public class Submenus {
 
       // Receives as many team member names as there are team members
       for (int numberOfTeamCounter = 0; numberOfTeamCounter < newNumberTeamMembers; numberOfTeamCounter++) {
-        System.out.print("\n\tEnter the first name of team member " + (numberOfTeamCounter + 1) + ": ");
-        newListOfTeamMembers[numberOfTeamCounter] = InputCheckers.validName();
+        // This section lets the user re-enter a new team member name if there is a duplicate name already in group.
+        boolean nameIsDuplicate = false;
+
+        while (!nameIsDuplicate) {
+          System.out.print("\n\tEnter the first name of team member " + (numberOfTeamCounter + 1) + ": ");
+          newListOfTeamMembers[numberOfTeamCounter] = InputCheckers.validName();
+
+          if (numberOfTeamCounter > 0) {
+            for (String name : newListOfTeamMembers) {
+              if (newListOfTeamMembers[numberOfTeamCounter].equalsIgnoreCase(name)) {
+                System.out.println("This name is a duplicate. Please enter another name.");
+                nameIsDuplicate = false;
+                break;
+              } else {
+                nameIsDuplicate = true;
+                break;
+              }
+            }
+          } else if (numberOfTeamCounter == 0) {
+            nameIsDuplicate = true;
+          }
+        }
       }
 
       // This creates a list of vote lists
